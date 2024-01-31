@@ -18,6 +18,11 @@ public class Formulario extends JFrame {
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        getContentPane().setBackground(new Color(144, 238, 144));
+
+        ImageIcon icon = new ImageIcon("texture.png");
+        setIconImage(icon.getImage());
+
         welcomeLabel = new JLabel("Welcome!");
         name = new JTextField(20);
         nameLabel = new JLabel("USER");
@@ -44,6 +49,8 @@ public class Formulario extends JFrame {
             }
         });
 
+        setFocusTraversalPolicy(new MyFocusTraversalPolicy());
+
         setLayout(new FlowLayout());
 
         add(welcomeLabel);
@@ -53,6 +60,47 @@ public class Formulario extends JFrame {
         add(password);
         add(logInButton);
 
+    }
+
+    private class MyFocusTraversalPolicy extends FocusTraversalPolicy {
+        @Override
+        public Component getComponentAfter(Container aContainer, Component aComponent) {
+            if (aComponent.equals(name)) {
+                return password;
+            } else if (aComponent.equals(password)) {
+                return logInButton;
+            } else if (aComponent.equals(logInButton)) {
+                return name;  // Cycle back to the first component
+            }
+            return null;
+        }
+
+        @Override
+        public Component getComponentBefore(Container aContainer, Component aComponent) {
+            if (aComponent.equals(name)) {
+                return logInButton;
+            } else if (aComponent.equals(password)) {
+                return name;
+            } else if (aComponent.equals(logInButton)) {
+                return password;
+            }
+            return null;
+        }
+
+        @Override
+        public Component getFirstComponent(Container aContainer) {
+            return name;
+        }
+
+        @Override
+        public Component getLastComponent(Container aContainer) {
+            return logInButton;
+        }
+
+        @Override
+        public Component getDefaultComponent(Container aContainer) {
+            return name;
+        }
     }
 
     public static void main(String[] args) {
